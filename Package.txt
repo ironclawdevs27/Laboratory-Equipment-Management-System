@@ -1,0 +1,149 @@
+--Package to manage admins,student,lab,equipment,complaint
+
+
+CREATE OR REPLACE PACKAGE equipment_management AS
+FUNCTION manage_complaint (p_complaint_id IN NUMBER, p_equipment_id IN NUMBER, p_complaint_status IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER;
+
+FUNCTION manage_student (p_student_id IN NUMBER, p_login_id IN NUMBER, p_name IN VARCHAR2, p_department IN VARCHAR2 , p_action IN VARCHAR2)
+RETURN NUMBER;
+
+FUNCTION manage_admin (p_admin_id IN VARCHAR2, p_name IN VARCHAR2, p_designation IN VARCHAR2 ,p_city IN VARCHAR,p_street IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER;
+
+FUNCTION manage_lab ( p_lab_id IN INT,p_lab_name IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER;
+
+FUNCTION manage_equipment (p_equipment_id IN VARCHAR2, p_lab_id IN INT, p_status_of_working IN VARCHAR2 ,p_monitor_status IN VARCHAR,p_keyboard_status IN VARCHAR2,p_CPU_status IN VARCHAR2,p_mouse_status IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER;
+
+END equipment_management;
+
+
+
+CREATE OR REPLACE PACKAGE BODY equipment_management AS
+FUNCTION manage_complaint (p_complaint_id IN NUMBER, p_equipment_id IN NUMBER, p_complaint_status IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER
+AS
+   v_result NUMBER;
+BEGIN
+   IF p_action = 'ADD' THEN
+      INSERT INTO complaints(ComplaintID, EquipmentID, ComplaintStatus)
+      VALUES (p_complaint_id, p_equipment_id, p_complaint_status);
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'UPDATE' THEN
+      UPDATE complaints
+      SET EquipmentID = p_equipment_id,
+          ComplaintStatus = p_complaint_status
+      WHERE ComplaintID = p_complaint_id;
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'DELETE' THEN
+      DELETE FROM complaints
+      WHERE ComplaintID = p_complaint_id;
+      v_result := SQL%ROWCOUNT;
+   ELSE
+      v_result := 0;
+   END IF;
+   RETURN v_result;
+END;
+FUNCTION manage_student (p_student_id IN NUMBER, p_login_id IN NUMBER, p_name IN VARCHAR2, p_department IN VARCHAR2 , p_action IN VARCHAR2)
+RETURN NUMBER
+AS
+   v_result NUMBER;
+BEGIN
+   IF p_action = 'ADD' THEN
+      INSERT INTO Students(StudentID, LoginID, Name, Department)
+      VALUES (p_student_id, p_Login_id, p_name,p_department);
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'UPDATE' THEN
+      UPDATE Students
+      SET LoginID = p_login_id,
+          Name = p_name,
+          Department = p_department
+      WHERE StudentID = p_student_id;
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'DELETE' THEN
+      DELETE FROM Students
+      WHERE StudentID = p_student_id;
+      v_result := SQL%ROWCOUNT;
+   ELSE
+      v_result := 0;
+   END IF;
+   RETURN v_result;
+END;
+FUNCTION manage_admin (p_admin_id IN VARCHAR2, p_name IN VARCHAR2, p_designation IN VARCHAR2 ,p_city IN VARCHAR,p_street IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER
+AS
+   v_result NUMBER;
+BEGIN
+   IF p_action = 'ADD' THEN
+      INSERT INTO Admin_(AdminID, Name, Designation,City,Street)
+      VALUES (p_admin_id, p_name,p_designation,p_city,p_street);
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'UPDATE' THEN
+      UPDATE Admin_
+      SET Name = p_name,
+          Designation = p_designation,
+          City = p_city,
+          Street = p_street
+      WHERE AdminID = p_admin_id;
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'DELETE' THEN
+      DELETE FROM Admin_
+      WHERE AdminID = p_admin_id;
+      v_result := SQL%ROWCOUNT;
+   ELSE
+      v_result := 0;
+   END IF;
+   RETURN v_result;
+END;   
+FUNCTION manage_lab ( p_lab_id IN INT,p_lab_name IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER
+AS
+   v_result NUMBER;
+BEGIN
+   IF p_action = 'ADD' THEN
+      INSERT INTO Labs(LabID, LabName)
+      VALUES (p_lab_id , p_lab_name );
+      v_result := SQL%ROWCOUNT;
+  
+   ELSIF p_action = 'DELETE' THEN
+      DELETE FROM Labs
+      WHERE LabID = p_lab_id;
+      v_result := SQL%ROWCOUNT;
+   ELSE
+      v_result := 0;
+   END IF;
+   RETURN v_result;
+END;
+FUNCTION manage_equipment (p_equipment_id IN VARCHAR2, p_lab_id IN INT, p_status_of_working IN VARCHAR2 ,p_monitor_status IN VARCHAR,p_keyboard_status IN VARCHAR2,p_CPU_status IN VARCHAR2,p_mouse_status IN VARCHAR2, p_action IN VARCHAR2)
+RETURN NUMBER
+AS
+   v_result NUMBER;
+BEGIN
+   IF p_action = 'ADD' THEN
+      INSERT INTO Equipment(EquipmentID,LabID,Status_Of_Working,Monitor_Status,Keyboard_Status,CPU_Status,Mouse_Status)
+      VALUES (p_equipment_id,p_lab_id,p_status_of_working ,p_monitor_status,p_keyboard_status,p_CPU_status,p_mouse_status);
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'UPDATE' THEN
+      UPDATE Equipment
+      SET LabID = p_lab_id,
+      Status_Of_Working = p_status_of_working,
+      Monitor_Status = p_monitor_status,
+      Keyboard_Status = p_keyboard_status,
+      CPU_Status = p_CPU_status,
+      Mouse_Status = p_mouse_status
+      WHERE EquipmentID = p_equipment_id;
+      v_result := SQL%ROWCOUNT;
+   ELSIF p_action = 'DELETE' THEN
+      DELETE FROM Equipment
+      WHERE EquipmentID = p_equipment_id;
+      v_result := SQL%ROWCOUNT;
+   ELSE
+      v_result := 0;
+   END IF;
+   RETURN v_result;
+
+END;
+
+END equipment_management;

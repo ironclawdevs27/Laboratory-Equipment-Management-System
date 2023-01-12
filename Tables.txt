@@ -1,0 +1,48 @@
+--Tables To Be Created
+CREATE TABLE User_(
+    ID VARCHAR(30) PRIMARY KEY,
+    Password VARCHAR(20) NOT NULL
+);
+CREATE TABLE Students(
+  StudentID VARCHAR(30) PRIMARY KEY,
+  LoginID VARCHAR(25),
+  Name VARCHAR(30),
+  Department VARCHAR(30),
+  FOREIGN KEY (LoginID) REFERENCES User_(ID)
+);
+CREATE TABLE Admin_ (
+  AdminID VARCHAR(20) PRIMARY KEY,
+  Name VARCHAR(30) NOT NULL,
+  Designation VARCHAR(40),
+  City VARCHAR(20),
+  Street VARCHAR(20),
+  FOREIGN KEY (AdminID) REFERENCES User_(ID)
+);
+CREATE TABLE Labs(
+  LabID INT PRIMARY KEY,
+  LabName VARCHAR(30)
+);
+CREATE TABLE Equipment (
+     EquipmentID VARCHAR(20) PRIMARY KEY ,
+     LabID INT NOT NULL,
+     Status_Of_Working VARCHAR(15) NOT NULL,
+     Monitor_Status VARCHAR(15) ,
+     Keyboard_Status VARCHAR(15),
+     CPU_Status VARCHAR(15) ,
+     Mouse_Status VARCHAR(15) ,
+     FOREIGN KEY (LabID) REFERENCES Labs(LabID)
+);
+     
+CREATE TABLE Complaints (
+  ComplaintID INT AUTO_INCREMENT PRIMARY KEY,
+  EquipmentID VARCHAR(35) NOT NULL,
+  ComplaintStatus VARCHAR(50),
+  FOREIGN KEY (EquipmentID) REFERENCES Equipment(EquipmentID)
+);
+
+CREATE TABLE Complaint_Type(
+    ComplaintID INT AUTO_INCREMENT PRIMARY KEY ,
+    EquipmentID VARCHAR(35) NOT NULL,
+    ComplaintType VARCHAR(255),
+    FOREIGN KEY (EquipmentID) REFERENCES Equipment(EquipmentID)
+);
